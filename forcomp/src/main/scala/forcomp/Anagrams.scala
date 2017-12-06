@@ -1,5 +1,7 @@
 package forcomp
 
+import scala.collection.mutable
+
 
 object Anagrams {
 
@@ -144,8 +146,14 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
+
+  def memoize[I, O](f: I => O): I => O = new mutable.HashMap[I, O]() {
+    override def apply(key: I) = getOrElseUpdate(key, f(key))
+  }
+
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
-    def anagramHelper(occurrences: Occurrences): List[Sentence] = {
+    lazy val anagramHelper: Occurrences => List[Sentence] = memoize {
+      occurrences =>
       if (occurrences.isEmpty) List(List())
       else {
         val valid = combinations(occurrences) filter dictionaryByOccurrences.contains
