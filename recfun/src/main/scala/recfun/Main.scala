@@ -21,7 +21,7 @@ object Main {
     def balance(chars: List[Char]): Boolean = balance_inner(chars, 0)
 
     def balance_inner(chars: List[Char], open: Int): Boolean = {
-      if (chars.isEmpty) if (open == 0) true else false
+      if (chars.isEmpty) open == 0
       else if (chars.head == '(') balance_inner(chars.tail, open + 1)
       else if (chars.head == ')') if (open == 0) false else balance_inner(chars.tail, open - 1)
       else balance_inner(chars.tail, open)
